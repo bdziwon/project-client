@@ -1,11 +1,10 @@
 
 public class ProjectBuilder {
 
-	private Project project;
+	private Project project=new Project();
 	
 
 	public Project build(){
-	Project project= new Project();
 	return this.project;
 	}
 	
@@ -32,6 +31,6 @@ public class ProjectBuilder {
 	this.project.addIssue(issue);
 	return this;
 	}
-
+	
 }
 
