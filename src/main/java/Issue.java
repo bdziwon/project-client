@@ -2,16 +2,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Bartłomiej Dziwoń on 21.01.2017. and others
+ * Created by BartĹ‚omiej DziwoĹ„ on 21.01.2017. and others
  */
 public class Issue implements Cloneable, DatabaseSqlInterface {
 	
 	
     private int id  = -1;
     private int projectId = -1;
-    private String title        = "Brak tytułu";
+    private String title        = "Brak tytuĹ‚u";
     private String description  = "Brak opisu";
-    private String priority     = "ZWYKŁY";
+    private String priority     = "ZWYKĹ�Y";
+  
+    public Issue(){
+    	
+    }
+    
+    public Issue(int id, int projectId, String title, String description, String priority){
+    	this.id=id;
+    	this.projectId=projectId;
+    	this.title=title;
+    	this.description=description;
+    	this.priority=priority;
+    }
     
     public String getTitle(){
     return this.title;
