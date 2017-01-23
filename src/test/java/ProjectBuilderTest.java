@@ -9,7 +9,7 @@ public class ProjectBuilderTest {
     @Test
     public void shouldBuildProperObject() {
         ProjectBuilder projectBuilder = new ProjectBuilder();
-        Project p = projectBuilder.setTitle("title").setDescription("description").Build();
+        Project p = projectBuilder.setTitle("title").setDescription("description").build();
         assertThat(p.getTitle()).isEqualTo("title");
         assertThat(p.getDescription()).isEqualTo("description");
 
