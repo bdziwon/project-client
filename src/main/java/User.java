@@ -11,6 +11,16 @@ public class User implements DatabaseSqlInterface {
     private String surname = "pusto";
     private String jobTitle = "PROGRAMISTA";
 
+    public User(){
+    	
+    }
+    
+    public User(int id, String name, String surname, String jobTitle){
+    	this.id=id;
+    	this.surname=surname;
+    	this.jobTitle=jobTitle;
+    }
+    
     public int getId() {
         return this.id;
     }

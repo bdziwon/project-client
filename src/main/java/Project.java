@@ -11,6 +11,17 @@ public class Project implements DatabaseSqlInterface {
     private ArrayList<Issue> issues = new ArrayList<Issue>();
     private ArrayList<User> users   = new ArrayList<User>();
     
+    public Project(){
+    	
+    }
+    
+    public Project(int id, String title, String description){
+    	this.id=id;
+    	this.title=title;
+    	this.description=description;
+    }
+    
+    
     public String getTitle(){
     return this.title;
     }
