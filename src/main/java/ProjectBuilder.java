@@ -3,7 +3,6 @@ public class ProjectBuilder {
     private Project project = new Project();
 
     public ProjectBuilder() {
-        this.project = build();
     }
 
     public Project build() {
