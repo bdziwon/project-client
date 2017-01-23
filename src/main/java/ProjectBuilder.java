@@ -3,29 +3,33 @@ public class ProjectBuilder {
 
 	private Project project;
 	
-	Project Build(){
+	public Project Build(){
 	Project project= new Project();
 	return project;
 	}
 	
-	ProjectBuilder(){
+	public ProjectBuilder(){
 	this.project=Build();	
 	}
 	
-	void SetTitle(String title){
-	this.project.setTitle(title);	
+	public ProjectBuilder setTitle(String title){
+	this.project.setTitle(title);
+	return this;
 	}
 	
-	void SetDescription(String description){
-	this.project.setDescription(description);	
+	public ProjectBuilder setDescription(String description){
+	this.project.setDescription(description);
+	return this;
 	}
 	
-	void AddUser(User user){
-	this.project.addUser(user);	
+	public ProjectBuilder addUser(User user){
+	this.project.addUser(user);
+	return this;
 	}
 	
-	void AddIssue(Issue issue){
+	public ProjectBuilder addIssue(Issue issue){
 	this.project.addIssue(issue);
+	return this;
 	}
 	
 }
