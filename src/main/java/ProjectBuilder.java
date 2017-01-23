@@ -3,13 +3,21 @@ public class ProjectBuilder {
 
 	private Project project;
 	
+<<<<<<< HEAD
+	public Project build(){
+=======
 	public Project Build(){
+>>>>>>> 1be31d98e8c135d647d63dadaae99e6ccb2646cd
 	Project project= new Project();
-	return project;
+	return this.project;
 	}
 	
 	public ProjectBuilder(){
+<<<<<<< HEAD
+	this.project=build();	
+=======
 	this.project=Build();	
+>>>>>>> 1be31d98e8c135d647d63dadaae99e6ccb2646cd
 	}
 	
 	public ProjectBuilder setTitle(String title){
@@ -31,5 +39,6 @@ public class ProjectBuilder {
 	this.project.addIssue(issue);
 	return this;
 	}
-	
+
 }
+
