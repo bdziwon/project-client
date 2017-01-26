@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 
 public class ProjectFacade {
 	
@@ -14,10 +17,13 @@ public class ProjectFacade {
 		projectBuilder.addIssue(issuePrototypeManager.getPrototype(key));
 	}
 	
-	public void addUser(User user){
-		//dodawanie usera do projektu przez buildera, 
-		//(ma byc tak? czy moze ma tu dodawac pustego usera?)
-		projectBuilder.addUser(user);
+	public void addUser(ArrayList<User> list){
+		//odczyt indeksu bezposrednio z konsoli, jako ¿e fasada bêdzie chyba najwy¿ej w hierarchii
+		list.toString();
+		Scanner sc = new Scanner(System.in);
+	    int index = sc.nextInt();
+	    sc.close();
+		projectBuilder.addUser(list.get(index));
 	}
 }
 
