@@ -10,6 +10,7 @@ import java.util.concurrent.Semaphore;
 public class ServerRequest {
     private DataPackage dataPackage;
     private Semaphore   semaphore = new Semaphore(0);
+
     public DataPackage getDataPackage() {
         return dataPackage;
     }
