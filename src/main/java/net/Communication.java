@@ -66,19 +66,20 @@ public class Communication {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//                try {
-//                    output.writeObject(request.getDataPackage());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                     dataPackage = (DataPackage) input.readObject();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (ClassNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-                request.getSemaphore().release();
+            try {
+                output.writeObject(request.getDataPackage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                 dataPackage = (DataPackage) input.readObject();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            request.setDataPackage(dataPackage);
+            request.getSemaphore().release();
         }
     }
 
