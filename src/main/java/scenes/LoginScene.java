@@ -15,6 +15,7 @@ import net.ServerRequest;
 import util.Credentials;
 import util.DataPackage;
 import util.RuntimeDataHolder;
+import util.User;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -169,6 +170,7 @@ public class LoginScene extends Application {
         DataPackage   dataPackage = new DataPackage("disconnect",null);
         ServerRequest request     = new ServerRequest(dataPackage);
         Communication c = Communication.getInstance();
+
         c.addRequest(request);
         try {
             request.getSemaphore().acquire();
@@ -176,6 +178,38 @@ public class LoginScene extends Application {
             e.printStackTrace();
         }
         Platform.exit();
+
+
+    }
+
+    public void przyklad() {
+        //TODO: remove
+
+        //Umieszczanie usera na serwerze
+        //Tworzenie odpowiedniego zapytania
+        User user = new User();
+        user.setName("Heniek");
+        user.setSurname("Tester");
+        DataPackage   dataPackage = new DataPackage("insert",user);
+        ServerRequest request     = new ServerRequest(dataPackage);
+
+        //Wyświetlenie przed
+        System.out.println("id przed dodaniem: "+user.getId());
+
+        //dodawanie do wysłania
+        Communication.getInstance().addRequest(request);
+
+        //Opcjonalnie - oczekiwanie na odpowiedź jeśli trzeba:
+        try {
+            request.getSemaphore().acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Wyświetlenie wyniku
+        user = (User) request.getDataPackage().getObject();
+        System.out.println("id po dodaniu (z bazy): "+user.getId());
+
     }
 
 }
