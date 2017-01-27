@@ -1,4 +1,5 @@
 import org.junit.Test;
+import util.Project;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,8 +9,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProjectBuilderTest {
     @Test
     public void shouldBuildProperObject() {
+
         ProjectBuilder projectBuilder = new ProjectBuilder();
-        Project p = projectBuilder.setTitle("title").setDescription("description").build();
+        Project p = projectBuilder
+                .setTitle("title")
+                .setDescription("description")
+                .build();
+
         assertThat(p.getTitle()).isEqualTo("title");
         assertThat(p.getDescription()).isEqualTo("description");
 
