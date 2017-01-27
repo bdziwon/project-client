@@ -1,5 +1,6 @@
 import org.junit.Test;
 import util.Issue;
+import util.prototypes.IssuePrototypeManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
