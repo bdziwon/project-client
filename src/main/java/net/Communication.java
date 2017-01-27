@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class Communication {
 
     private static Communication communication = null;
-    private BlockingQueue<DataPackage> requests;
+    private BlockingQueue<DataPackage> requests = new ArrayBlockingQueue<DataPackage>(100);
     private boolean running = false;
 
     private Communication() {
