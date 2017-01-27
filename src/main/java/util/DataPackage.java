@@ -1,7 +1,6 @@
 package util;
 
 import java.io.Serializable;
-import java.util.concurrent.Semaphore;
 
 public class DataPackage implements Serializable {
     private String details;
