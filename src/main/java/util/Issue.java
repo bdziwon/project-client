@@ -1,17 +1,18 @@
+package util;
+
+import util.interfaces.DatabaseSqlInterface;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by BartĹ‚omiej DziwoĹ„ on 21.01.2017. and others
- */
 public class Issue implements Cloneable, DatabaseSqlInterface {
 	
 	
-    private int id  = -1;
-    private int projectId = -1;
-    private String title        = "Brak tytuĹ‚u";
+    private int id              = -1;
+    private int projectId       = -1;
+    private String title        = "Brak tytułu";
     private String description  = "Brak opisu";
-    private String priority     = "ZWYKĹ�Y";
+    private String priority     = "ZWYKŁY";
   
     public Issue(){
     	
