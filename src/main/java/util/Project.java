@@ -1,3 +1,7 @@
+package util;
+
+import util.interfaces.DatabaseSqlInterface;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -5,12 +9,13 @@ import java.util.ArrayList;
 
 public class Project implements DatabaseSqlInterface {
 
-	private int id = -1;
-    private String title            = "Brak tytułu";
-    private String description      = "Brak opisu";
-    private ArrayList<Issue> issues = new ArrayList<Issue>();
-    private ArrayList<User> users   = new ArrayList<User>();
-    
+	private int              id               = -1;
+    private String           title            = "Brak tytułu";
+    private String           description      = "Brak opisu";
+    private ArrayList<Issue> issues           = new ArrayList<Issue>();
+    private ArrayList<User>  users            = new ArrayList<User>();
+
+
     public Project(){
     	
     }

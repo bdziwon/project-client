@@ -1,14 +1,16 @@
+package util;
+
+import util.interfaces.DatabaseSqlInterface;
+
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.StringJoiner;
 
 
 public class User implements DatabaseSqlInterface {
 
-    private int id = -1;
-    private String name = "pusto";
-    private String surname = "pusto";
+    private int    id       = -1;
+    private String name     = "pusto";
+    private String surname  = "pusto";
     private String jobTitle = "PROGRAMISTA";
 
     public User(){
