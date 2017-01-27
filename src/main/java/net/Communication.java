@@ -1,6 +1,7 @@
 package net;
 
 
+import org.apache.maven.settings.Server;
 import util.DataPackage;
 import util.RuntimeDataHolder;
 
@@ -14,10 +15,11 @@ import java.util.concurrent.BlockingQueue;
 public class Communication {
 
     private static Communication communication = null;
-    private BlockingQueue<DataPackage> requests = new ArrayBlockingQueue<DataPackage>(100);
+    private BlockingQueue<ServerRequest> requests = new ArrayBlockingQueue<ServerRequest>(100);
     private boolean running = false;
 
     private Communication() {
+
     }
 
     public void startThread() {
@@ -34,44 +36,49 @@ public class Communication {
         running = true;
     }
     private void communicationMethod() {
+
         Socket socket = RuntimeDataHolder.getInstance().getSocket();
         ObjectInputStream  input   = null;
         ObjectOutputStream output  = null;
-        DataPackage        request = null;
+        ServerRequest request = null;
+        DataPackage   dataPackage = null;
 
         if (socket == null) {
             throw new RuntimeException("Socket is null");
         }
+
+
         try {
-            input  = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
+            input  = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        System.out.println("Początek pętli");
+
         while (true) {
-            System.out.println("Wątek communication działa");
+            System.out.println("Pętla");
             try {
+                System.out.println("Oczekiwanie na dane");
                 request = requests.take();
+                System.out.println("Przetwarzanie");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            synchronized (request) {
-              /*  try {
-                    output.writeObject(request);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    request = (DataPackage) input.readObject();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } */
-                System.out.println("notify");
-                notify();
-            }
+//                try {
+//                    output.writeObject(request.getDataPackage());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                try {
+//                     dataPackage = (DataPackage) input.readObject();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (ClassNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+                request.getSemaphore().release();
         }
     }
 
@@ -82,7 +89,11 @@ public class Communication {
         return communication;
     }
 
-    public void addRequest(DataPackage dataPackage) {
-        this.requests.add(dataPackage);
+    public void addRequest(ServerRequest request) {
+        try {
+            this.requests.put(request);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

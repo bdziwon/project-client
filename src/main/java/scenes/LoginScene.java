@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
 import net.Communication;
+import net.ServerRequest;
 import util.Credentials;
 import util.DataPackage;
 import util.RuntimeDataHolder;
@@ -18,6 +19,7 @@ import util.RuntimeDataHolder;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 
 public class LoginScene extends Application {
 
@@ -147,13 +149,12 @@ public class LoginScene extends Application {
         //TODO: wysyłanie na serwer i odbiór
         String details = "login";
         DataPackage dataPackage = new DataPackage(details, credentials);
-
-        synchronized (dataPackage) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        ServerRequest request   = new ServerRequest(dataPackage);
+        Communication.getInstance().addRequest(request);
+        try {
+            request.getSemaphore().acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -165,16 +166,16 @@ public class LoginScene extends Application {
 
     @FXML
     private void exitButtonAction(ActionEvent event) {
-        DataPackage dataPackage = new DataPackage("disconnect",null);
-        Communication.getInstance().addRequest(dataPackage);
-        synchronized (dataPackage) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Platform.exit();
+        DataPackage   dataPackage = new DataPackage("disconnect",null);
+        ServerRequest request     = new ServerRequest(dataPackage);
+        Communication c = Communication.getInstance();
+        c.addRequest(request);
+        try {
+            request.getSemaphore().acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        Platform.exit();
     }
 
 }
