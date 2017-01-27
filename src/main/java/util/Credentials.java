@@ -1,10 +1,11 @@
 package util;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Credentials {
+public class Credentials implements Serializable {
     private String login;
     private String password;
 

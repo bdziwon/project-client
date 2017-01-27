@@ -2,11 +2,12 @@ package util;
 
 import util.interfaces.DatabaseSqlInterface;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class User implements DatabaseSqlInterface {
+public class User implements DatabaseSqlInterface, Serializable {
 
     private int    id       = -1;
     private String name     = "pusto";

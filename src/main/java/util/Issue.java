@@ -2,10 +2,11 @@ package util;
 
 import util.interfaces.DatabaseSqlInterface;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Issue implements Cloneable, DatabaseSqlInterface {
+public class Issue implements Cloneable, DatabaseSqlInterface, Serializable {
 	
 	
     private int id              = -1;
