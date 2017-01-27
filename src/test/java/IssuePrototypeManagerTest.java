@@ -1,7 +1,7 @@
-import static org.assertj.core.api.Assertions.assertThat;
-
-
 import org.junit.Test;
+import util.Issue;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class IssuePrototypeManagerTest {
