@@ -5,17 +5,19 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
+import net.Communication;
 import util.Credentials;
+import util.DataPackage;
+import util.RuntimeDataHolder;
 
 import java.io.IOException;
+import java.net.Socket;
+import java.util.Optional;
 
 public class LoginScene extends Application {
 
@@ -38,6 +40,7 @@ public class LoginScene extends Application {
     @FXML
     private PasswordField passwordField;
 
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Logowanie");
@@ -53,6 +56,8 @@ public class LoginScene extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        connectToServer();
+        Communication.getInstance().startThread();
     }
 
     @FXML
@@ -72,6 +77,34 @@ public class LoginScene extends Application {
 
         if (error) {
             return;
+        }
+
+    }
+
+    private boolean connectToServer() {
+        while (true) {
+            Socket socket = RuntimeDataHolder.getInstance().getSocket();
+            if (socket != null) {
+                return true;
+            }
+            try {
+                socket = new Socket("127.0.0.1", 4000);
+                RuntimeDataHolder.getInstance().setSocket(socket);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Połączenie nie udane");
+                alert.setHeaderText("Połączenie z serwerem nieudane");
+                alert.setContentText("Czy chcesz spróbować ponownie?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    continue;
+                } else {
+                    Platform.exit();
+                }
+                return false;
+            }
+            return true;
         }
 
     }
@@ -110,8 +143,18 @@ public class LoginScene extends Application {
         return false;
     }
 
-    private boolean credentialsHaveServerSideError(Credentials credentials) {
+    private boolean credentialsHaveServerSideError(Credentials credentials)  {
         //TODO: wysyłanie na serwer i odbiór
+        String details = "login";
+        DataPackage dataPackage = new DataPackage(details, credentials);
+
+        synchronized (dataPackage) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return false;
     }
 
@@ -122,7 +165,16 @@ public class LoginScene extends Application {
 
     @FXML
     private void exitButtonAction(ActionEvent event) {
-        Platform.exit();
+        DataPackage dataPackage = new DataPackage("disconnect",null);
+        Communication.getInstance().addRequest(dataPackage);
+        synchronized (dataPackage) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Platform.exit();
+        }
     }
 
 }
