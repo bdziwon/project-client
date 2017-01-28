@@ -185,10 +185,20 @@ public class LoginScene extends Application {
         }
 
         //błąd logowania
+        String title;
+        String header;
+        if (details.equals("already logged")) {
+            title    = "Użytkownik jest już zalogowany";
+            header   = title;
+        } else {
+            title   = "Nieprawidłowy login lub hasło";
+            header  = title;
+        }
+
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
-        alert.setTitle("Nieprawidłowy login lub hasło");
-        alert.setHeaderText("Nieprawidłowy login lub hasło");
+        alert.setTitle(title);
+        alert.setHeaderText(header);
         alert.setContentText("Serwer zwrócił '"+details+"'");
         alert.showAndWait();
 
