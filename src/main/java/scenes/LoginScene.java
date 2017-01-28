@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import net.Communication;
 import net.ServerRequest;
+import org.apache.maven.plugin.logging.Log;
 import util.Credentials;
 import util.DataPackage;
 import util.RuntimeDataHolder;
@@ -43,18 +44,21 @@ public class LoginScene extends Application {
     @FXML
     private PasswordField passwordField;
 
-
     @Override
     public void start(Stage primaryStage) {
+
+        GridPane root = new GridPane();
+
         primaryStage.setTitle("Logowanie");
         primaryStage.setResizable(false);
 
-        GridPane root = new GridPane();
         try {
-            root = (GridPane) FXMLLoader.load(getClass().getClassLoader().getResource("LoginScene.fxml"));
+            root = (GridPane) FXMLLoader.load(getClass().getClassLoader()
+                    .getResource("LoginScene.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -168,18 +172,26 @@ public class LoginScene extends Application {
     @FXML
     private void exitButtonAction(ActionEvent event) {
         DataPackage   dataPackage = new DataPackage("disconnect",null);
+        DataPackage   receivedDataPackage;
+
         ServerRequest request     = new ServerRequest(dataPackage);
         Communication c = Communication.getInstance();
 
+
         c.addRequest(request);
+        c.setRunning(false);
+
         try {
             request.getSemaphore().acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        receivedDataPackage = request.getDataPackage();
+
+        System.out.println(receivedDataPackage.getDetails());
+
         Platform.exit();
-
-
     }
 
     public void przyklad() {

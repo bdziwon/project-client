@@ -16,6 +16,7 @@ public class Communication {
 
     private static Communication communication = null;
     private BlockingQueue<ServerRequest> requests = new ArrayBlockingQueue<ServerRequest>(100);
+
     private boolean running = false;
 
     private Communication() {
@@ -35,6 +36,7 @@ public class Communication {
         t.start();
         running = true;
     }
+
     private void communicationMethod() {
 
         Socket socket = RuntimeDataHolder.getInstance().getSocket();
@@ -57,7 +59,7 @@ public class Communication {
 
         System.out.println("Początek pętli");
 
-        while (true) {
+        while (running) {
             System.out.println("Pętla");
             try {
                 System.out.println("Oczekiwanie na dane");
@@ -82,7 +84,6 @@ public class Communication {
             request.getSemaphore().release();
         }
     }
-
     public static Communication getInstance() {
         if (communication == null) {
             communication = new Communication();
@@ -96,5 +97,13 @@ public class Communication {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }
