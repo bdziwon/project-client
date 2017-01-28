@@ -150,17 +150,48 @@ public class LoginScene extends Application {
         return false;
     }
 
+    /**
+     * Sprawdza czy użytkownik istnieje i dane się zgadzają, jak tak loguje
+     * Ustawia zalogowanego {@link User} w RuntimeDataHolder.loggedUser
+     * @return true jeśli zalogowano
+     */
     private boolean credentialsHaveServerSideError(Credentials credentials)  {
-        //TODO: wysyłanie na serwer i odbiór
-        String details = "login";
-        DataPackage dataPackage = new DataPackage(details, credentials);
-        ServerRequest request   = new ServerRequest(dataPackage);
+
+        DataPackage     receivedDataPackage;
+        String          details     = "login";
+        DataPackage     dataPackage = new DataPackage(details, credentials);
+        ServerRequest   request     = new ServerRequest(dataPackage);
+
         Communication.getInstance().addRequest(request);
+
         try {
             request.getSemaphore().acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        receivedDataPackage = request.getDataPackage();
+        details = receivedDataPackage.getDetails();
+        if (details.equals("logged")) {
+            //zalogowano pomyślnie
+            User user = (User) receivedDataPackage.getObject();
+
+            RuntimeDataHolder.getInstance().setLoggedUser(user);
+
+            System.out.println("Zalogowano pomyślnie:");
+            System.out.println("Imie:       "+user.getName());
+            System.out.println("Nazwisko:   "+user.getSurname());
+            return true;
+        }
+
+        //błąd logowania
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        alert.setTitle("Nieprawidłowy login lub hasło");
+        alert.setHeaderText("Nieprawidłowy login lub hasło");
+        alert.setContentText("Serwer zwrócił '"+details+"'");
+        alert.showAndWait();
+
         return false;
     }
 
