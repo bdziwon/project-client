@@ -5,9 +5,9 @@ import java.net.Socket;
 public class RuntimeDataHolder {
 
     private static RuntimeDataHolder runtimeDataHolder = null;
-    private Socket socket = null;
 
-    private User loggedUser;
+    private Socket  socket      = null;
+    private User    loggedUser  = null;
 
     private RuntimeDataHolder() {
     }
