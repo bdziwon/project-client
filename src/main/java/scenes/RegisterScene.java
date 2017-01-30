@@ -72,6 +72,7 @@ public class RegisterScene {
         alert.setHeaderText("Rejestracja pomyślna!");
         alert.setContentText("Zaloguj się!");
 
+        NavigationController.navigateUp(event);
         alert.showAndWait();
 
         return;
@@ -79,7 +80,7 @@ public class RegisterScene {
 
     @FXML
     private void backButtonAction(ActionEvent event) {
-        NavigationController.navigateTo("LoginScene.fxml",event);
+        NavigationController.navigateUp(event);
     }
 
 
