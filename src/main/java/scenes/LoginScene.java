@@ -87,26 +87,7 @@ public class LoginScene  {
 
     @FXML
     private void exitButtonAction(ActionEvent event) {
-        DataPackage   dataPackage = new DataPackage("disconnect",null);
-        DataPackage   receivedDataPackage;
-
-        ServerRequest request     = new ServerRequest(dataPackage);
-        Communication c = Communication.getInstance();
-
-        c.addRequest(request);
-        c.setRunning(false);
-
-        try {
-            request.getSemaphore().acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        receivedDataPackage = request.getDataPackage();
-
-        System.out.println(receivedDataPackage.getDetails());
-
-        Platform.exit();
+        NavigationController.exitApp();
     }
 
 //    private void goToRegisterScene(ActionEvent event) throws IOException {
