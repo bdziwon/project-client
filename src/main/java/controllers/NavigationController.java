@@ -12,9 +12,15 @@ import net.Communication;
 import util.RuntimeDataHolder;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.NoSuchElementException;
+import java.util.Stack;
 
 
 public class NavigationController extends Application {
+
+    private static Deque<Scene> scenes = new ArrayDeque<Scene>();
 
     public static void main(String[] args) {
         launch(args);
@@ -47,8 +53,12 @@ public class NavigationController extends Application {
     }
 
     public static void navigateTo(String sceneFXML, ActionEvent event) {
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        Parent root = null;
+        Stage  stage         = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Scene  currentScene  = stage.getScene();
+        Parent root          = null;
+
+        scenes.push(currentScene);
+
         try {
             root = (GridPane) FXMLLoader.load(NavigationController.class.getClassLoader()
                     .getResource(sceneFXML));
@@ -57,6 +67,19 @@ public class NavigationController extends Application {
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
+    }
+
+    public static void navigateUp(ActionEvent event) {
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Scene scene;
+        try {
+            scene = scenes.pop();
+        } catch (NoSuchElementException e) {
+            return;
+        }
+
+        stage.setScene(scene);
+
 
     }
 }
