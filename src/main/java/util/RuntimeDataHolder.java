@@ -1,13 +1,19 @@
 package util;
 
+import controllers.NavigationController;
+import util.facades.ProjectFacade;
+import util.facades.UserFacade;
+
 import java.net.Socket;
 
 public class RuntimeDataHolder {
 
     private static RuntimeDataHolder runtimeDataHolder = null;
 
-    private Socket  socket      = null;
-    private User    loggedUser  = null;
+    private Socket          socket          = null;
+    private User            loggedUser      = null;
+    private UserFacade      userFacade      = new UserFacade();
+    private ProjectFacade   projectFacade   = new ProjectFacade();
 
     private RuntimeDataHolder() {
     }
@@ -34,4 +40,21 @@ public class RuntimeDataHolder {
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
+
+    public ProjectFacade getProjectFacade() {
+        return projectFacade;
+    }
+
+    public void setProjectFacade(ProjectFacade projectFacade) {
+        this.projectFacade = projectFacade;
+    }
+
+    public UserFacade getUserFacade() {
+        return userFacade;
+    }
+
+    public void setUserFacade(UserFacade userFacade) {
+        this.userFacade = userFacade;
+    }
+
 }
