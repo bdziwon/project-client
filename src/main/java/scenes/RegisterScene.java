@@ -53,12 +53,14 @@ public class RegisterScene {
         String      surname     = surnameField.getText();
         String      jobTitle    = (String) jobTitleComboBox.getValue();
         User        user        = new User();
+        UserFacade  userFacade  = RuntimeDataHolder.getInstance().getUserFacade();
 
         user.setName(name);
         user.setSurname(surname);
-        UserFacade userFacade = RuntimeDataHolder.getInstance().getUserFacade();
+        user.setJobTitle(jobTitle);
 
         result = userFacade.register(credentials, user);
+
         if (!result.equals("registered")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Rejestracja nieudana!");
