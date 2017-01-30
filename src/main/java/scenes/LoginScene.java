@@ -1,29 +1,21 @@
 package scenes;
 
 import controllers.NavigationController;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import net.Communication;
 import net.ServerRequest;
-import org.apache.maven.plugin.logging.Log;
 import util.Credentials;
 import util.DataPackage;
 import util.RuntimeDataHolder;
 import util.User;
 import util.facades.UserFacade;
-
-import java.io.IOException;
 
 public class LoginScene  {
 
