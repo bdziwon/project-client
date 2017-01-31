@@ -144,8 +144,7 @@ public class UserFacade {
 
 	public String register(Credentials credentials, User user) {
 
-	    String              result      = null;
-		boolean 			registered 	= false;
+	    String              result;
 		Communication 		c 			= Communication.getInstance();
 		String				details		= "register";
 		ArrayList<Object>	params		= new ArrayList<Object>();
