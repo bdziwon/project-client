@@ -176,7 +176,14 @@ public class UserFacade {
 	}
 
 	public void logout(){
-		//TODO: wylogowywanie	
+
+		DataPackage		dataPackage		= new DataPackage("logout",null);
+		ServerRequest	serverRequest	= new ServerRequest(dataPackage, false);
+		Communication	communication	= Communication.getInstance();
+
+		communication.addRequest(serverRequest);
+
+		RuntimeDataHolder.getInstance().setLoggedUser(null);
 	}
 
 
