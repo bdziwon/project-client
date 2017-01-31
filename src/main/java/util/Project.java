@@ -2,9 +2,7 @@ package util;
 
 import util.interfaces.DatabaseSqlInterface;
 
-import javax.net.SocketFactory;
 import java.io.Serializable;
-import java.lang.management.ManagementFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 
 public class Project implements DatabaseSqlInterface, Serializable {
 
-	private int              id               = -1;
+    private int              id               = -1;
     private String           title            = "Brak tytułu";
     private String           description      = "Brak opisu";
     private ArrayList<Issue> issues           = new ArrayList<Issue>();
@@ -20,30 +18,29 @@ public class Project implements DatabaseSqlInterface, Serializable {
 
 
     public Project(){
-    	
+
     }
-    
+
     public Project(int id, String title, String description){
-    	this.id=id;
-    	this.title=title;
-    	this.description=description;
+        this.id=id;
+        this.title=title;
+        this.description=description;
     }
-    
-    
+
     public String getTitle(){
-    return this.title;
+        return this.title;
     }
 
     public void setTitle(String title){
-    this.title=title;
+        this.title=title;
     }
-    
+
     public String getDescription(){
-    return this.description;
-    }    
-       
+        return this.description;
+    }
+
     public void setDescription(String description){
-    this.description=description;
+        this.description=description;
     }
 
     public int getId() {
