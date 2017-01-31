@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -66,11 +67,10 @@ public class NavigationController extends Application {
         this.primaryStage = primaryStage;
     }
 
-    public static void navigateTo(String sceneFXML, ActionEvent event, boolean centered) {
-        Stage  stage         = (Stage) ((Node)event.getSource()).getScene().getWindow();
+    public static void navigateTo(String sceneFXML, Scene scene, boolean centered) {
+        Stage  stage         = (Stage) scene.getWindow();
         Scene  currentScene  = stage.getScene();
         Parent root          = null;
-
         scenes.push(currentScene);
 
         try {
@@ -79,16 +79,16 @@ public class NavigationController extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene scene = new Scene(root);
+        scene = new Scene(root);
         stage.setScene(scene);
         if (centered) {
             stage.centerOnScreen();
         }
     }
 
-    public static void navigateUp(ActionEvent event) {
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        Scene scene;
+
+    public static void navigateUp(Scene scene) {
+        Stage   stage = (Stage) scene.getWindow();
         try {
             scene = scenes.pop();
         } catch (NoSuchElementException e) {
@@ -104,17 +104,11 @@ public class NavigationController extends Application {
         DataPackage dataPackage = new DataPackage("disconnect",null);
         DataPackage   receivedDataPackage;
 
-        ServerRequest request     = new ServerRequest(dataPackage);
+        ServerRequest request     = new ServerRequest(dataPackage, false);
         Communication c = Communication.getInstance();
 
         c.addRequest(request);
         c.setRunning(false);
-
-        try {
-            request.getSemaphore().acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         receivedDataPackage = request.getDataPackage();
 

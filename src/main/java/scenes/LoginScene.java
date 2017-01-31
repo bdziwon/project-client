@@ -76,14 +76,14 @@ public class LoginScene  {
             return;
         }
 
-        NavigationController.navigateTo("OverviewScene.fxml",event, true);
+        NavigationController.navigateTo("OverviewScene.fxml",loginButton.getScene(), true);
 
         //TODO: Zmiana sceny na widok projektów
     }
 
     @FXML
     private void registerButtonAction(ActionEvent event) {
-        NavigationController.navigateTo("RegisterScene.fxml",event, false);
+        NavigationController.navigateTo("RegisterScene.fxml",registerButton.getScene(), false);
 
     }
 
@@ -92,15 +92,6 @@ public class LoginScene  {
         NavigationController.exitApp();
     }
 
-//    private void goToRegisterScene(ActionEvent event) throws IOException {
-//        Stage stage = new Stage();
-//        stage.setTitle("Shop Management");
-//        Pane myPane = null;
-//        myPane = FXMLLoader.load(getClass().getResource("createCategory.fxml"));
-//        Scene scene = new Scene(myPane);
-//        stage.setScene(scene);
-//        stage.show();
-//    }
 
     public void przyklad() {
         //TODO: remove
