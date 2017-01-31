@@ -34,6 +34,31 @@
            </GridPane.margin>
        </PasswordField>
 
+       <TextField fx:id="nameField" prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+           <GridPane.margin>
+               <Insets left="40.0" right="40.0" />
+           </GridPane.margin>
+       </TextField>
+
+       <TextField fx:id="surnameField" prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+           <GridPane.margin>
+               <Insets left="40.0" right="40.0" />
+           </GridPane.margin>
+       </TextField>
+
+       <ComboBox fx:id="jobTitleComboBox" prefHeight="25.0" prefWidth="460.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+           <items>
+               <FXCollections fx:factory="observableArrayList">
+                   <String fx:id="PROGRAMISTA" fx:value="PROGRAMISTA" />
+                   <String fx:id="TESTER" fx:value="TESTER" />
+                   <String fx:id="ADMINISTRATOR" fx:value="ADMINISTRATOR" />
+               </FXCollections>
+           </items>
+           <GridPane.margin>
+               <Insets left="40.0" right="40.0" />
+           </GridPane.margin>
+       </ComboBox>
+
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nazwa użytkownika" textOrigin="CENTER" wrappingWidth="154.7294921875" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="40.0" right="40.0" />
@@ -88,16 +113,8 @@
             <Insets left="40.0" right="40.0" />
          </GridPane.margin>
       </Text>
-      <TextField fx:id="nameField" prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <GridPane.margin>
-            <Insets left="40.0" right="40.0" />
-         </GridPane.margin>
-      </TextField>
-      <TextField fx:id="surnameField" prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-         <GridPane.margin>
-            <Insets left="40.0" right="40.0" />
-         </GridPane.margin>
-      </TextField>
+
+
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stanowisko" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="90.7294921875" GridPane.rowIndex="5">
          <font>
             <Font size="15.0" />
@@ -106,17 +123,6 @@
             <Insets left="40.0" right="40.0" />
          </GridPane.margin>
       </Text>
-      <ComboBox fx:id="jobTitleComboBox" prefHeight="25.0" prefWidth="460.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-          <items>
-              <FXCollections fx:factory="observableArrayList">
-                  <String fx:id="PROGRAMISTA" fx:value="PROGRAMISTA" />
-                  <String fx:id="TESTER" fx:value="TESTER" />
-                  <String fx:id="ADMINISTRATOR" fx:value="ADMINISTRATOR" />
-              </FXCollections>
-          </items>
-         <GridPane.margin>
-            <Insets left="40.0" right="40.0" />
-         </GridPane.margin>
-      </ComboBox>
+
    </children>
 </GridPane>

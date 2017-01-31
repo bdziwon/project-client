@@ -15,6 +15,7 @@ import net.Communication;
 import net.ServerRequest;
 import util.DataPackage;
 import util.RuntimeDataHolder;
+import util.facades.UserFacade;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -52,7 +53,7 @@ public class NavigationController extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        RuntimeDataHolder.getInstance().getUserFacade().connectToServer();
+        UserFacade.getInstance().connectToServer();
         Communication.getInstance().startThread();
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

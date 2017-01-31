@@ -17,6 +17,19 @@ import java.util.Optional;
 
 public class UserFacade {
 
+	private static UserFacade userFacade = null;
+
+	private UserFacade() {
+		super();
+	}
+
+	public static UserFacade getInstance() {
+		if (userFacade == null) {
+			userFacade = new UserFacade();
+		}
+		return userFacade;
+	}
+
 	public void addUser(){
 		//TODO: dodawanie usera
 		//gdzie beda przekazywane wartosci do konstruowania usera?

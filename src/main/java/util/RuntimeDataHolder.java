@@ -12,8 +12,6 @@ public class RuntimeDataHolder {
 
     private Socket          socket          = null;
     private User            loggedUser      = null;
-    private UserFacade      userFacade      = new UserFacade();
-    private ProjectFacade   projectFacade   = new ProjectFacade();
 
     private RuntimeDataHolder() {
     }
@@ -40,21 +38,5 @@ public class RuntimeDataHolder {
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
-
-    public ProjectFacade getProjectFacade() {
-        return projectFacade;
-    }
-
-    public void setProjectFacade(ProjectFacade projectFacade) {
-        this.projectFacade = projectFacade;
-    }
-
-    public UserFacade getUserFacade() {
-        return userFacade;
-    }
-
-    public void setUserFacade(UserFacade userFacade) {
-        this.userFacade = userFacade;
-    }
-
+    
 }

@@ -19,7 +19,7 @@ public class UserFacadeTest {
         user.setName("adam");
         user.setSurname("adam");
 
-        UserFacade userFacade = new UserFacade();
+        UserFacade userFacade = UserFacade.getInstance();
 
         userFacade.connectToServer();
         Communication.getInstance().startThread();

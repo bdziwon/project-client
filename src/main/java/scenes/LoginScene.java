@@ -39,7 +39,7 @@ public class LoginScene  {
     @FXML
     private void loginButtonAction(ActionEvent event) {
 
-        UserFacade userFacade = RuntimeDataHolder.getInstance().getUserFacade();
+        UserFacade userFacade = UserFacade.getInstance();
 
         String      login       = loginField.getText();
         String      password    = passwordField.getText();

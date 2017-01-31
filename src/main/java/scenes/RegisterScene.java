@@ -53,7 +53,7 @@ public class RegisterScene {
         String      surname     = surnameField.getText();
         String      jobTitle    = (String) jobTitleComboBox.getValue();
         User        user        = new User();
-        UserFacade  userFacade  = RuntimeDataHolder.getInstance().getUserFacade();
+        UserFacade  userFacade  = UserFacade.getInstance();
 
         user.setName(name);
         user.setSurname(surname);
