@@ -57,14 +57,10 @@ public class Communication {
             e.printStackTrace();
         }
 
-        System.out.println("Początek pętli");
 
         while (running) {
-            System.out.println("Pętla");
             try {
-                System.out.println("Oczekiwanie na dane");
                 request = requests.take();
-                System.out.println("Przetwarzanie");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -72,6 +68,9 @@ public class Communication {
                 output.writeObject(request.getDataPackage());
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            if (!request.isWaitingforResponse()) {
+                continue;
             }
             try {
                  dataPackage = (DataPackage) input.readObject();
