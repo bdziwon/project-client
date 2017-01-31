@@ -76,12 +76,14 @@ public class LoginScene  {
             return;
         }
 
+        NavigationController.navigateTo("OverviewScene.fxml",event, true);
+
         //TODO: Zmiana sceny na widok projektów
     }
 
     @FXML
     private void registerButtonAction(ActionEvent event) {
-        NavigationController.navigateTo("RegisterScene.fxml",event);
+        NavigationController.navigateTo("RegisterScene.fxml",event, false);
 
     }
 
