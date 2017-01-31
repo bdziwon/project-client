@@ -39,7 +39,7 @@ public class NavigationController extends Application {
 
         GridPane root = new GridPane();
 
-        primaryStage.setTitle("Logowanie");
+        primaryStage.setTitle("Projekt");
         primaryStage.setResizable(false);
 
         try {
@@ -52,6 +52,7 @@ public class NavigationController extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.centerOnScreen();
 
         UserFacade.getInstance().connectToServer();
         Communication.getInstance().startThread();
@@ -65,7 +66,7 @@ public class NavigationController extends Application {
         this.primaryStage = primaryStage;
     }
 
-    public static void navigateTo(String sceneFXML, ActionEvent event) {
+    public static void navigateTo(String sceneFXML, ActionEvent event, boolean centered) {
         Stage  stage         = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Scene  currentScene  = stage.getScene();
         Parent root          = null;
@@ -80,6 +81,9 @@ public class NavigationController extends Application {
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        if (centered) {
+            stage.centerOnScreen();
+        }
     }
 
     public static void navigateUp(ActionEvent event) {
