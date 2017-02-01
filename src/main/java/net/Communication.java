@@ -1,6 +1,7 @@
 package net;
 
 
+import org.apache.maven.settings.Server;
 import util.DataPackage;
 import util.RuntimeDataHolder;
 
@@ -13,17 +14,20 @@ import java.util.concurrent.BlockingQueue;
 
 public class Communication {
 
-    private static Communication communication = null;
-    private BlockingQueue<DataPackage> requests = new ArrayBlockingQueue<DataPackage>(100);
+    private BlockingQueue<ServerRequest> requests = new ArrayBlockingQueue<ServerRequest>(100);
+    private Socket socket = null;
+
     private boolean running = false;
 
-    private Communication() {
+    public Communication() {
+        super();
     }
 
     public void startThread() {
         if (running) {
             return;
         }
+        System.out.println("Rozpoczęto nowy wątek communication");
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -33,56 +37,77 @@ public class Communication {
         t.start();
         running = true;
     }
+
     private void communicationMethod() {
-        Socket socket = RuntimeDataHolder.getInstance().getSocket();
+
+        Socket socket = RuntimeDataHolder.getInstance().getCommunication().getSocket();
         ObjectInputStream  input   = null;
         ObjectOutputStream output  = null;
-        DataPackage        request = null;
+        ServerRequest request = null;
+        DataPackage   dataPackage = null;
 
         if (socket == null) {
             throw new RuntimeException("Socket is null");
         }
+
+
         try {
-            input  = new ObjectInputStream(socket.getInputStream());
             output = new ObjectOutputStream(socket.getOutputStream());
+            input  = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        while (true) {
-            System.out.println("Wątek communication działa");
+
+        while (running) {
             try {
                 request = requests.take();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            synchronized (request) {
-              /*  try {
-                    output.writeObject(request);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    request = (DataPackage) input.readObject();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } */
-                System.out.println("notify");
-                notify();
+            try {
+                output.writeObject(request.getDataPackage());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            if (!request.isWaitingforResponse()) {
+                continue;
+            }
+            try {
+                 dataPackage = (DataPackage) input.readObject();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            request.setDataPackage(dataPackage);
+            request.getSemaphore().release();
+        }
+
+        System.out.println("Koniec połączenia klienta");
+    }
+
+    public void addRequest(ServerRequest request) {
+        try {
+            this.requests.put(request);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
-    public static Communication getInstance() {
-        if (communication == null) {
-            communication = new Communication();
-        }
-        return communication;
+    public boolean isRunning() {
+        return running;
     }
 
-    public void addRequest(DataPackage dataPackage) {
-        this.requests.add(dataPackage);
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
     }
 }

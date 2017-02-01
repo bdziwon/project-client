@@ -2,11 +2,12 @@ package util;
 
 import util.interfaces.DatabaseSqlInterface;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class User implements DatabaseSqlInterface {
+public class User implements DatabaseSqlInterface, Serializable {
 
     private int    id       = -1;
     private String name     = "pusto";
@@ -14,15 +15,15 @@ public class User implements DatabaseSqlInterface {
     private String jobTitle = "PROGRAMISTA";
 
     public User(){
-    	
+
     }
-    
+
     public User(int id, String name, String surname, String jobTitle){
-    	this.id=id;
-    	this.surname=surname;
-    	this.jobTitle=jobTitle;
+        this.id=id;
+        this.surname=surname;
+        this.jobTitle=jobTitle;
     }
-    
+
     public int getId() {
         return this.id;
     }
@@ -54,7 +55,7 @@ public class User implements DatabaseSqlInterface {
     @Override
     public String makeUpdateSql() {
         String sql =
-                "UPDATE user " +
+                "UPDATE user_t " +
                         "SET " +
                         "name = '" + getName() + "', " +
                         "surname = '" + getSurname() + "', " +
@@ -66,14 +67,14 @@ public class User implements DatabaseSqlInterface {
     @Override
     public String makeDeleteSql() {
         String sql =
-                "DELETE FROM user WHERE id=" + getId();
+                "DELETE FROM user_t WHERE id=" + getId();
         return sql;
     }
 
     @Override
     public String makeInsertSql() {
         String sql =
-                "INSERT INTO user(name,surname,jobTitle) " +
+                "INSERT INTO user_t(name,surname,jobTitle) " +
                         "VALUES ('" + getName() + "','" + getSurname() + "','" + getJobTitle() + "')";
 
         return sql;
@@ -82,7 +83,7 @@ public class User implements DatabaseSqlInterface {
     @Override
     public String makeSelectSql() {
         String sql =
-                "SELECT * FROM user WHERE id = " + getId();
+                "SELECT * FROM user_t WHERE id = " + getId();
         return sql;
     }
 
@@ -105,5 +106,10 @@ public class User implements DatabaseSqlInterface {
             e.printStackTrace();
         }
         return user;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname + ", " + jobTitle;
     }
 }

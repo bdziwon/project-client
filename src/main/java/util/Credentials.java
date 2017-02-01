@@ -1,11 +1,14 @@
 package util;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Credentials {
+public class Credentials implements Serializable {
+
     private String login;
+
     private String password;
 
     public Credentials(String login, String password) {
@@ -44,5 +47,22 @@ public class Credentials {
         }
         return true;
     }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
 
 }

@@ -1,29 +1,21 @@
 package scenes;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-
+import controllers.NavigationController;
 import javafx.event.ActionEvent;
-import net.Communication;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import net.ServerRequest;
 import util.Credentials;
 import util.DataPackage;
 import util.RuntimeDataHolder;
+import util.User;
+import util.facades.UserFacade;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.util.Optional;
-
-public class LoginScene extends Application {
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class LoginScene  {
 
     @FXML
     private Button loginButton;
@@ -40,141 +32,93 @@ public class LoginScene extends Application {
     @FXML
     private PasswordField passwordField;
 
-
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Logowanie");
-        primaryStage.setResizable(false);
-
-        GridPane root = new GridPane();
-        try {
-            root = (GridPane) FXMLLoader.load(getClass().getClassLoader().getResource("LoginScene.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        connectToServer();
-        Communication.getInstance().startThread();
-    }
+    public Stage primaryStage;
 
     @FXML
     private void loginButtonAction(ActionEvent event) {
-        String login    = loginField.getText();
-        String password = passwordField.getText();
+
+        UserFacade userFacade = UserFacade.getInstance();
+
+        String      login       = loginField.getText();
+        String      password    = passwordField.getText();
         Credentials credentials = new Credentials(login,password);
-        boolean error;
+        String      error;
 
-        error = credentialsHaveLocalError(credentials);
+        error = userFacade.login(credentials);
 
-        if (error) {
-            return;
-        }
-
-        error = credentialsHaveServerSideError(credentials);
-
-        if (error) {
-            return;
-        }
-
-    }
-
-    private boolean connectToServer() {
-        while (true) {
-            Socket socket = RuntimeDataHolder.getInstance().getSocket();
-            if (socket != null) {
-                return true;
-            }
-            try {
-                socket = new Socket("127.0.0.1", 4000);
-                RuntimeDataHolder.getInstance().setSocket(socket);
-            } catch (IOException e) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Połączenie nie udane");
-                alert.setHeaderText("Połączenie z serwerem nieudane");
-                alert.setContentText("Czy chcesz spróbować ponownie?");
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK){
-                    continue;
+        if (error != null) {
+            //błąd logowania
+            String title;
+            String header;
+            if (error.equals("already logged")) {
+                title  = "Użytkownik jest już zalogowany";
+                header = title;
+                error  = "Serwer zwrócił '"+error+"'";
+            } else {
+                if (error.equals("user not found")) {
+                    title = "Nieprawidłowy login lub hasło";
+                    header = title;
+                    error = "Serwer zwrócił '"+error+"'";
                 } else {
-                    Platform.exit();
+                    title   = "Nieprawidłowy format danych";
+                    header  = "Błędy logowania";
                 }
-                return false;
             }
-            return true;
-        }
 
-    }
-
-    private boolean credentialsHaveLocalError(Credentials credentials) {
-
-        String message = "";
-
-        if (!credentials.loginHaveAllowedLength()) {
-            message += "Minimalna długość nazwy użytkownika: 4 znaki"+System.getProperty("line.separator");
-        }
-
-        if (!credentials.passwordHaveAllowedLength()) {
-            message += "Minimalna długość hasła: 4 znaki"+System.getProperty("line.separator");
-        }
-
-        if (credentials.loginContainsUnallowedChars()) {
-            message += "Niedozwolone znaki w nazwie użytkownika"+System.getProperty("line.separator");
-        }
-        if (credentials.passwordContainsUnallowedChars()) {
-            message += "Niedozwolone znaki w haśle"+System.getProperty("line.separator");
-        }
-
-        if (message.length() > 0) {
-            message += System.getProperty("line.separator") + "Popraw błędy i spróbuj ponownie";
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
-            alert.setTitle("Nieprawidłowy format danych");
-            alert.setHeaderText("Błądy logowania:");
-            alert.setContentText(message);
+            alert.setTitle(title);
+            alert.setHeaderText(header);
+            alert.setContentText(error);
             alert.showAndWait();
-
-            return true;
+            return;
         }
 
-        return false;
-    }
+        NavigationController.navigateTo("OverviewScene.fxml",loginButton.getScene(), true);
 
-    private boolean credentialsHaveServerSideError(Credentials credentials)  {
-        //TODO: wysyłanie na serwer i odbiór
-        String details = "login";
-        DataPackage dataPackage = new DataPackage(details, credentials);
-
-        synchronized (dataPackage) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
+        //TODO: Zmiana sceny na widok projektów
     }
 
     @FXML
     private void registerButtonAction(ActionEvent event) {
-        //TODO: register
+        NavigationController.navigateTo("RegisterScene.fxml",registerButton.getScene(), false);
+
     }
 
     @FXML
     private void exitButtonAction(ActionEvent event) {
-        DataPackage dataPackage = new DataPackage("disconnect",null);
-        Communication.getInstance().addRequest(dataPackage);
-        synchronized (dataPackage) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Platform.exit();
+        NavigationController.exitApp();
+    }
+
+
+    public void przyklad() {
+        //TODO: remove
+
+        //Umieszczanie usera na serwerze
+        //Tworzenie odpowiedniego zapytania
+        User user = new User();
+        user.setName("Heniek");
+        user.setSurname("Tester");
+        DataPackage   dataPackage = new DataPackage("insert",user);
+        ServerRequest request     = new ServerRequest(dataPackage);
+
+        //Wyświetlenie przed
+        System.out.println("id przed dodaniem: "+user.getId());
+
+        //dodawanie do wysłania
+        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+        //Opcjonalnie - oczekiwanie na odpowiedź jeśli trzeba:
+        try {
+            request.getSemaphore().acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        //Wyświetlenie wyniku
+        user = (User) request.getDataPackage().getObject();
+        System.out.println("id po dodaniu (z bazy): "+user.getId());
+
     }
 
 }
