@@ -1,16 +1,13 @@
 package util.facades;
 
+import net.ServerRequest;
+import util.DataPackage;
 import util.Project;
-import util.User;
-import util.builders.ProjectBuilder;
-import util.prototypes.IssuePrototypeManager;
+import util.RuntimeDataHolder;
 import java.util.ArrayList;
 
 
 public class ProjectFacade {
-	
-	private ProjectBuilder projectBuilder= new ProjectBuilder();
-	private IssuePrototypeManager issuePrototypeManager= new IssuePrototypeManager();
 
 	private static ProjectFacade projectFacade = null;
 
@@ -27,18 +24,52 @@ public class ProjectFacade {
 
 
 
-	public Project createProject(){
-		//tworzenie pustego projektu builderem
-		return projectBuilder.build();  
+	public Project createProject(Project project){
+		DataPackage dataPackage     = new DataPackage("insert",project);
+		ServerRequest request         = new ServerRequest(dataPackage);
+
+		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+		try {
+			request.getSemaphore().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		dataPackage = request.getDataPackage();
+		project     = (Project) dataPackage.getObject();
+		return project;
 	}
-	
-	public void addIssue(String key){
-		//dodawanie issue z prototypu przez buildera, (przy uzyciu klucza ma byc?)
-		projectBuilder.addIssue(issuePrototypeManager.getPrototype(key));
+
+	public Project updateProject(Project project) {
+		DataPackage dataPackage = new DataPackage("update",project);
+		ServerRequest request = new ServerRequest(dataPackage);
+
+		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+		try {
+			request.getSemaphore().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		project = (Project) request.getDataPackage().getObject();
+		return project;
 	}
-	
-	public void addUser(ArrayList<User> list){
-	}
+
+	public ArrayList<Project> getProjectList() {
+	    DataPackage     dataPackage     = new DataPackage("list projects","");
+        ServerRequest   request         = new ServerRequest(dataPackage);
+
+        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+        try {
+            request.getSemaphore().acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Project> projects = (ArrayList<Project>) request.getDataPackage().getObject();
+        return projects;
+    }
 }
 
 

@@ -127,6 +127,22 @@ public class UserFacade {
 
 	}
 
+	public User findUserByLogin(String username) {
+        String          details         = "select username";
+        DataPackage     dataPackage     = new DataPackage(details,username);
+        ServerRequest   request         = new ServerRequest(dataPackage);
+        User            user            = new User();
+        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+        try {
+            request.getSemaphore().acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        user = (User) request.getDataPackage().getObject();
+        return user;
+
+    }
+
 	public String login(Credentials credentials){
 
 		String result = null;
@@ -193,12 +209,13 @@ public class UserFacade {
             return false;
         }
 
-        communication.addRequest(serverRequest);
-        communication.setRunning(false);
+		dataPackage         	= new DataPackage("disconnect",null);
+		ServerRequest   request = new ServerRequest(dataPackage, false);
 
+		communication.addRequest(request);
+		communication.setRunning(false);
 
-
-        for (Map.Entry<String, RuntimeDataHolder> entry : mementos.entrySet()
+		for (Map.Entry<String, RuntimeDataHolder> entry : mementos.entrySet()
              ) {
             System.out.println("Znaleziono innego użytkownika, zmiana");
             runtimeDataHolder.restoreFromMemento(entry.getValue().getLoggedUser().toString());

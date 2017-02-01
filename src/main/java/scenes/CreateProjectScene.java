@@ -8,6 +8,7 @@ import net.Communication;
 import net.ServerRequest;
 import util.*;
 import util.builders.ProjectBuilder;
+import util.facades.ProjectFacade;
 import util.facades.UserFacade;
 
 
@@ -53,19 +54,7 @@ public class CreateProjectScene {
                 .setDescription(descriptionField.getText())
                 .build();
 
-        DataPackage     dataPackage     = new DataPackage("insert",project);
-        ServerRequest   request         = new ServerRequest(dataPackage);
-
-        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
-
-        try {
-            request.getSemaphore().acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        dataPackage = request.getDataPackage();
-        project     = (Project) dataPackage.getObject();
+        project = ProjectFacade.getInstance().createProject(project);
 
         if (project.getId() == -1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -76,22 +65,13 @@ public class CreateProjectScene {
             return;
         }
 
-        dataPackage.setDetails("update");
+        ProjectFacade.getInstance().updateProject(project);
 
-        request = new ServerRequest(dataPackage);
-
-        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
-
-        try {
-            request.getSemaphore().acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Stworzono nowy projekt");
         alert.setHeaderText("Projekt stworzony pomyślnie");
         alert.showAndWait();
-        NavigationController.navigateUp(sendButton.getScene());
+        NavigationController.navigateTo("OverviewScene.fxml",sendButton.getScene(),false);
         return;
 
 
@@ -100,18 +80,9 @@ public class CreateProjectScene {
     @FXML
     private void addUserButtonAction(ActionEvent event) {
         String          username        = usernameField.getText();
-        User            user            = new User();
-        String          details         = "select username";
-        DataPackage     dataPackage     = new DataPackage(details,username);
-        ServerRequest   request   = new ServerRequest(dataPackage);
 
-        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
-        try {
-            request.getSemaphore().acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        user = (User) request.getDataPackage().getObject();
+        User user = UserFacade.getInstance().findUserByLogin(username);
+
         if (user.getId() == -1) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Użytkownik nie istnieje");

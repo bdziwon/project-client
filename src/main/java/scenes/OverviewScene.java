@@ -8,11 +8,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import util.Credentials;
+import util.Project;
 import util.RuntimeDataHolder;
 import util.User;
+import util.facades.ProjectFacade;
 import util.facades.UserFacade;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -33,6 +36,9 @@ public class OverviewScene implements Initializable {
     private Label leftMenuLabel;
 
     @FXML
+    private ListView<Project> projectList;
+
+    @FXML
     private void logoutMenuItemAction(ActionEvent event) {
         boolean otherUserLogged = UserFacade.getInstance().logout();
         if (otherUserLogged) {
@@ -46,30 +52,26 @@ public class OverviewScene implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         User    loggedUser      = RuntimeDataHolder.getInstance().getLoggedUser();
         String  jobTitle        = loggedUser.getJobTitle();
-        Menu    menu            = null;
 
-        userInfoLabel.setText("Zalogowano " +
-                loggedUser.getName()+" "+loggedUser.getSurname()+
-                "["+loggedUser.getJobTitle() + "]"
-        );
+        initUserInfoLabel();
 
         if (jobTitle.equals("ADMINISTRATOR")) {
-            leftMenuLabel.setText("Wszystkie projekty");
-            menu = new Menu("Administracja");
-            final MenuItem createProjectMenuItem = new MenuItem("Stwórz projekt");
-
-            createProjectMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    createProjectMenuItemAction(event);
-                }
-            });
-
-            menu.getItems().addAll(createProjectMenuItem);
-            menuBar.getMenus().addAll(menu);
+            initAdministrator();
         }
+        initChangeUser();
+        initProjectList();
+    }
 
-        menu = new Menu("Zmień użytkownika");
+    private void initProjectList() {
+        ArrayList<Project> projects = ProjectFacade.getInstance().getProjectList();
+        for (Project project : projects
+             ) {
+            projectList.getItems().add(project);
+        }
+    }
+
+    private void initChangeUser() {
+        Menu menu = new Menu("Zmień użytkownika");
 
         MenuItem menuItem = new MenuItem("Dodaj..");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -105,6 +107,33 @@ public class OverviewScene implements Initializable {
 
             menu.getItems().addAll(menuItem);
         }
+        menuBar.getMenus().addAll(menu);
+    }
+
+    private void initUserInfoLabel() {
+        User    loggedUser      = RuntimeDataHolder.getInstance().getLoggedUser();
+
+        userInfoLabel.setText("Zalogowano " +
+                loggedUser.getName()+" "+loggedUser.getSurname()+
+                "["+loggedUser.getJobTitle() + "]"
+        );
+    }
+
+    private void initAdministrator() {
+        Menu    menu;
+
+        leftMenuLabel.setText("Wszystkie projekty");
+        menu = new Menu("Administracja");
+        final MenuItem createProjectMenuItem = new MenuItem("Stwórz projekt");
+
+        createProjectMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                createProjectMenuItemAction(event);
+            }
+        });
+
+        menu.getItems().addAll(createProjectMenuItem);
         menuBar.getMenus().addAll(menu);
     }
 
