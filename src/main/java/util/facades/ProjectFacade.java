@@ -1,6 +1,7 @@
 package util.facades;
 
 import net.ServerRequest;
+import org.apache.maven.settings.Server;
 import util.DataPackage;
 import util.Project;
 import util.RuntimeDataHolder;
@@ -70,6 +71,19 @@ public class ProjectFacade {
         ArrayList<Project> projects = (ArrayList<Project>) request.getDataPackage().getObject();
         return projects;
     }
+
+	public void removeProject(Project selectedProject) {
+		DataPackage dataPackage = new DataPackage("delete",selectedProject);
+		ServerRequest request = new ServerRequest(dataPackage);
+
+		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+		try {
+			request.getSemaphore().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }
 
 

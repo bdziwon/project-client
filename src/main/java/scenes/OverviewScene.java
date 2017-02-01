@@ -1,6 +1,9 @@
 package scenes;
 
 import controllers.NavigationController;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -39,6 +42,20 @@ public class OverviewScene implements Initializable {
     private ListView<Project> projectList;
 
     @FXML
+    private TextArea projectTitleTextArea;
+
+    @FXML
+    private TextArea projectDescriptionTextArea;
+
+    @FXML
+    private  Button saveChangesButton;
+
+    @FXML
+    private Button removeProjectButton;
+
+    private Project selectedProject = new Project();
+
+    @FXML
     private void logoutMenuItemAction(ActionEvent event) {
         boolean otherUserLogged = UserFacade.getInstance().logout();
         if (otherUserLogged) {
@@ -46,6 +63,38 @@ public class OverviewScene implements Initializable {
             return;
         }
         NavigationController.navigateTo("LoginScene.fxml", menuBar.getScene(), true);
+    }
+
+    @FXML
+    private void saveChangesButtonAction(ActionEvent event) {
+        if (selectedProject == null || selectedProject.getId() == -1) {
+            System.out.println("error przy zapisywaniu");
+            return;
+        }
+        selectedProject.setTitle(projectTitleTextArea.getText());
+        selectedProject.setDescription(projectDescriptionTextArea.getText());
+        ProjectFacade.getInstance().updateProject(selectedProject);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NavigationController.navigateTo("OverviewScene.fxml",menuBar.getScene(),false);
+            }
+        });
+    }
+
+    @FXML
+    private void removeProjectButtonAction(ActionEvent event) {
+        if (selectedProject == null || selectedProject.getId() == -1) {
+            System.out.println("error przy usuwaniu");
+            return;
+        }
+        ProjectFacade.getInstance().removeProject(selectedProject);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NavigationController.navigateTo("OverviewScene.fxml",menuBar.getScene(),false);
+            }
+        });
     }
 
     @Override
@@ -64,10 +113,21 @@ public class OverviewScene implements Initializable {
 
     private void initProjectList() {
         ArrayList<Project> projects = ProjectFacade.getInstance().getProjectList();
+        projectList.getItems().clear();
         for (Project project : projects
              ) {
             projectList.getItems().add(project);
         }
+
+        projectList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Project>() {
+            @Override
+            public void changed(ObservableValue<? extends Project> observableValue, Project project, Project t1) {
+                selectedProject = t1;
+                projectTitleTextArea.setText(t1.getTitle());
+                projectDescriptionTextArea.setText(t1.getDescription());
+            }
+        });
+
     }
 
     private void initChangeUser() {
@@ -121,7 +181,9 @@ public class OverviewScene implements Initializable {
 
     private void initAdministrator() {
         Menu    menu;
-
+        projectTitleTextArea.setEditable(true);
+        projectDescriptionTextArea.setEditable(true);
+        removeProjectButton.setDisable(false);
         leftMenuLabel.setText("Wszystkie projekty");
         menu = new Menu("Administracja");
         final MenuItem createProjectMenuItem = new MenuItem("Stwórz projekt");
