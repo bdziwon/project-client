@@ -1,3 +1,5 @@
+package zipper;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -28,25 +30,9 @@ public class ZipHandler {
 		ZipHandler zipHandler=
 				new ZipHandler("C:/Documents and Settings/janusz.JAN/workspace/FileHandler/src"
 						,"C:/Documents and Settings/janusz.JAN/workspace/FileHandler/src/bla.zip"
-						,"C:/Documents and Settings/janusz.JAN/workspace/FileHandler/src/blaDestination.zip");
+						,"C:/Documents and Settings/janusz.JAN/workspace/FileHandler/src/blaDestination1.zip");
 		HandleZip(zipHandler);
 		
-
-/*		
-		
-		String zipPath="C:/Documents and Settings/janusz.JAN/workspace/FileHandler/src/bla.zip";
-		FileZipper.zipFolder("C:/Documents and Settings/janusz.JAN/workspace/FileHandler/src"
-				, zipPath);
-		
-		String input= zipPath;
-		String output= "C:/Documents and Settings/janusz.JAN/workspace/FileHandler/src/blaDest.zip";		
-		
-		File file = new File(input);
-		File file2 = new File(output);
-		file2.createNewFile();
-
-		ZipSender.copyFile(file, file2);
-	*/
 	}
 
 }
