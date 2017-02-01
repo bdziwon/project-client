@@ -39,7 +39,6 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Akcje">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Zmień konto" />
               <MenuItem fx:id="logoutMenuItem" mnemonicParsing="false" onAction="#logoutMenuItemAction" text="Wyloguj" />
             </items>
           </Menu>

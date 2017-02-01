@@ -108,7 +108,7 @@ public class LoginScene  {
         System.out.println("id przed dodaniem: "+user.getId());
 
         //dodawanie do wysłania
-        Communication.getInstance().addRequest(request);
+        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
 
         //Opcjonalnie - oczekiwanie na odpowiedź jeśli trzeba:
         try {

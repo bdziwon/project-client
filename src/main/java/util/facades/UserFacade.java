@@ -37,13 +37,13 @@ public class UserFacade {
 
 	public boolean connectToServer() {
 		while (true) {
-			Socket socket = RuntimeDataHolder.getInstance().getSocket();
+			Socket socket = RuntimeDataHolder.getInstance().getCommunication().getSocket();
 			if (socket != null) {
 				return true;
 			}
 			try {
 				socket = new Socket("127.0.0.1", 4000);
-				RuntimeDataHolder.getInstance().setSocket(socket);
+				RuntimeDataHolder.getInstance().getCommunication().setSocket(socket);
 			} catch (IOException e) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 				alert.setTitle("Połączenie nie udane");
@@ -103,7 +103,7 @@ public class UserFacade {
 		DataPackage     dataPackage = new DataPackage(details, credentials);
 		ServerRequest request     = new ServerRequest(dataPackage);
 
-		Communication.getInstance().addRequest(request);
+		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
 
 		try {
 			request.getSemaphore().acquire();
@@ -145,7 +145,8 @@ public class UserFacade {
 	public String register(Credentials credentials, User user) {
 
 	    String              result;
-		Communication 		c 			= Communication.getInstance();
+		Communication 		c 			= RuntimeDataHolder.getInstance().getCommunication();
+
 		String				details		= "register";
 		ArrayList<Object>	params		= new ArrayList<Object>();
 
@@ -178,7 +179,7 @@ public class UserFacade {
 
 		DataPackage		dataPackage		= new DataPackage("logout",null);
 		ServerRequest	serverRequest	= new ServerRequest(dataPackage, false);
-		Communication	communication	= Communication.getInstance();
+		Communication	communication	= RuntimeDataHolder.getInstance().getCommunication();
 
 		communication.addRequest(serverRequest);
 

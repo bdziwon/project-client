@@ -19,10 +19,7 @@ import util.RuntimeDataHolder;
 import util.facades.UserFacade;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.*;
 
 
 public class NavigationController extends Application {
@@ -55,8 +52,11 @@ public class NavigationController extends Application {
         primaryStage.show();
         primaryStage.centerOnScreen();
 
+        Communication communication = new Communication();
+        RuntimeDataHolder.getInstance().setCommunication(communication);
         UserFacade.getInstance().connectToServer();
-        Communication.getInstance().startThread();
+
+        communication.startThread();
 
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
@@ -80,12 +80,18 @@ public class NavigationController extends Application {
             e.printStackTrace();
         }
         scene = new Scene(root);
+        RuntimeDataHolder.getInstance().setScene(scene);
         stage.setScene(scene);
         if (centered) {
             stage.centerOnScreen();
         }
     }
 
+
+//    public static void navigateTo(Scene scene) {
+//        Stage  stage         = (Stage) scene.getWindow();
+//        stage.setScene(scene);
+//    }
 
     public static void navigateUp(Scene scene) {
         Stage   stage = (Stage) scene.getWindow();
@@ -94,25 +100,33 @@ public class NavigationController extends Application {
         } catch (NoSuchElementException e) {
             return;
         }
-
+        RuntimeDataHolder.getInstance().setScene(scene);
         stage.setScene(scene);
 
 
     }
 
     public static void exitApp() {
-        DataPackage dataPackage = new DataPackage("disconnect",null);
-        DataPackage   receivedDataPackage;
+//        HashMap<String, RuntimeDataHolder> runtimeDataHolderHashMap
+//                = RuntimeDataHolder.getInstance().getMementos().getList();
+//
+//        for (Map.Entry<String, RuntimeDataHolder> entry : runtimeDataHolderHashMap.entrySet()
+//             ) {
+//            RuntimeDataHolder.getInstance().restoreFromMemento(entry.getValue().toString());
 
-        ServerRequest request     = new ServerRequest(dataPackage, false);
-        Communication c = Communication.getInstance();
+            DataPackage dataPackage = new DataPackage("disconnect",null);
+            DataPackage   receivedDataPackage;
 
-        c.addRequest(request);
-        c.setRunning(false);
+            ServerRequest request     = new ServerRequest(dataPackage, false);
+            Communication c = RuntimeDataHolder.getInstance().getCommunication();
 
-        receivedDataPackage = request.getDataPackage();
+            c.addRequest(request);
+            c.setRunning(false);
 
-        System.out.println(receivedDataPackage.getDetails());
+            receivedDataPackage = request.getDataPackage();
+
+            System.out.println(receivedDataPackage.getDetails());
+//        }
 
         Platform.exit();
     }

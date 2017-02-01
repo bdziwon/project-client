@@ -13,6 +13,8 @@ import util.User;
 import util.facades.UserFacade;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -49,9 +51,45 @@ public class OverviewScene implements Initializable {
 
             menu.getItems().addAll(createProjectMenuItem);
             menuBar.getMenus().addAll(menu);
-            return;
         }
 
+        menu = new Menu("Zmień użytkownika");
+
+        MenuItem menuItem = new MenuItem("Dodaj..");
+        menuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                RuntimeDataHolder.getInstance().saveToMemento();
+                RuntimeDataHolder.getInstance().createNew();
+                NavigationController.navigateTo("LoginScene.fxml",menuBar.getScene(),false);
+            }
+        });
+
+        menu.getItems().addAll(menuItem);
+        HashMap<String, RuntimeDataHolder> mementos = RuntimeDataHolder.getInstance()
+                .getMementos().getList();
+
+        for (Map.Entry<String, RuntimeDataHolder> entry : mementos.entrySet()) {
+            String title = entry.getValue().getLoggedUser().toString();
+            menuItem = new MenuItem(title);
+
+            if (title.equals(RuntimeDataHolder.getInstance()
+                    .getLoggedUser().toString())) {
+                continue;
+            }
+
+            menuItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    RuntimeDataHolder.getInstance().saveToMemento();
+                    RuntimeDataHolder.getInstance().restoreFromMemento(((MenuItem)event.getSource()).getText());
+                    NavigationController.navigateTo("OverviewScene.fxml",menuBar.getScene(),false);
+                }
+            });
+
+            menu.getItems().addAll(menuItem);
+        }
+        menuBar.getMenus().addAll(menu);
     }
 
     private void createProjectMenuItemAction(ActionEvent event) {

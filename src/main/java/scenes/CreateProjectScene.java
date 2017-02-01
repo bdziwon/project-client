@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import net.Communication;
 import net.ServerRequest;
-import util.Credentials;
-import util.DataPackage;
-import util.Project;
-import util.User;
+import util.*;
 import util.builders.ProjectBuilder;
 import util.facades.UserFacade;
 
@@ -59,7 +56,7 @@ public class CreateProjectScene {
         DataPackage     dataPackage     = new DataPackage("insert",project);
         ServerRequest   request         = new ServerRequest(dataPackage);
 
-        Communication.getInstance().addRequest(request);
+        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
 
         try {
             request.getSemaphore().acquire();
@@ -83,7 +80,7 @@ public class CreateProjectScene {
 
         request = new ServerRequest(dataPackage);
 
-        Communication.getInstance().addRequest(request);
+        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
 
         try {
             request.getSemaphore().acquire();
@@ -106,15 +103,15 @@ public class CreateProjectScene {
         User            user            = new User();
         String          details         = "select username";
         DataPackage     dataPackage     = new DataPackage(details,username);
-        ServerRequest   serverRequest   = new ServerRequest(dataPackage);
+        ServerRequest   request   = new ServerRequest(dataPackage);
 
-        Communication.getInstance().addRequest(serverRequest);
+        RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
         try {
-            serverRequest.getSemaphore().acquire();
+            request.getSemaphore().acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        user = (User) serverRequest.getDataPackage().getObject();
+        user = (User) request.getDataPackage().getObject();
         if (user.getId() == -1) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Użytkownik nie istnieje");

@@ -1,6 +1,7 @@
 import net.Communication;
 import org.junit.Test;
 import util.Credentials;
+import util.RuntimeDataHolder;
 import util.User;
 import util.facades.UserFacade;
 
@@ -22,7 +23,7 @@ public class UserFacadeTest {
         UserFacade userFacade = UserFacade.getInstance();
 
         userFacade.connectToServer();
-        Communication.getInstance().startThread();
+        RuntimeDataHolder.getInstance().getCommunication().startThread();
 
         result = userFacade.register(credentials, user);
         assertThat(result).isEqualTo("registered");

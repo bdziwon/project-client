@@ -14,13 +14,13 @@ import java.util.concurrent.BlockingQueue;
 
 public class Communication {
 
-    private static Communication communication = null;
     private BlockingQueue<ServerRequest> requests = new ArrayBlockingQueue<ServerRequest>(100);
+    private Socket socket = null;
 
     private boolean running = false;
 
-    private Communication() {
-
+    public Communication() {
+        super();
     }
 
     public void startThread() {
@@ -39,7 +39,7 @@ public class Communication {
 
     private void communicationMethod() {
 
-        Socket socket = RuntimeDataHolder.getInstance().getSocket();
+        Socket socket = RuntimeDataHolder.getInstance().getCommunication().getSocket();
         ObjectInputStream  input   = null;
         ObjectOutputStream output  = null;
         ServerRequest request = null;
@@ -83,12 +83,6 @@ public class Communication {
             request.getSemaphore().release();
         }
     }
-    public static Communication getInstance() {
-        if (communication == null) {
-            communication = new Communication();
-        }
-        return communication;
-    }
 
     public void addRequest(ServerRequest request) {
         try {
@@ -104,5 +98,13 @@ public class Communication {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
     }
 }
