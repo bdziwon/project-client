@@ -27,6 +27,7 @@ public class Communication {
         if (running) {
             return;
         }
+        System.out.println("Rozpoczęto nowy wątek communication");
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,6 +83,8 @@ public class Communication {
             request.setDataPackage(dataPackage);
             request.getSemaphore().release();
         }
+
+        System.out.println("Koniec połączenia klienta");
     }
 
     public void addRequest(ServerRequest request) {

@@ -27,8 +27,18 @@ public class OverviewScene implements Initializable {
     private MenuItem logoutMenuItem;
 
     @FXML
+    private Label userInfoLabel;
+
+    @FXML
+    private Label leftMenuLabel;
+
+    @FXML
     private void logoutMenuItemAction(ActionEvent event) {
-        UserFacade.getInstance().logout();
+        boolean otherUserLogged = UserFacade.getInstance().logout();
+        if (otherUserLogged) {
+            NavigationController.navigateTo("OverviewScene.fxml", menuBar.getScene(), true);
+            return;
+        }
         NavigationController.navigateTo("LoginScene.fxml", menuBar.getScene(), true);
     }
 
@@ -38,7 +48,13 @@ public class OverviewScene implements Initializable {
         String  jobTitle        = loggedUser.getJobTitle();
         Menu    menu            = null;
 
+        userInfoLabel.setText("Zalogowano " +
+                loggedUser.getName()+" "+loggedUser.getSurname()+
+                "["+loggedUser.getJobTitle() + "]"
+        );
+
         if (jobTitle.equals("ADMINISTRATOR")) {
+            leftMenuLabel.setText("Wszystkie projekty");
             menu = new Menu("Administracja");
             final MenuItem createProjectMenuItem = new MenuItem("Stwórz projekt");
 

@@ -1,7 +1,6 @@
 package scenes;
 
 import controllers.NavigationController;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -9,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import net.Communication;
 import net.ServerRequest;
 import util.Credentials;
 import util.DataPackage;

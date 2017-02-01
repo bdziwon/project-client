@@ -12,8 +12,7 @@ import util.User;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 public class UserFacade {
 
@@ -175,15 +174,39 @@ public class UserFacade {
 		return details;
 	}
 
-	public void logout(){
+	public boolean logout(){
 
-		DataPackage		dataPackage		= new DataPackage("logout",null);
-		ServerRequest	serverRequest	= new ServerRequest(dataPackage, false);
-		Communication	communication	= RuntimeDataHolder.getInstance().getCommunication();
+		DataPackage		    dataPackage		    = new DataPackage("logout",null);
+		ServerRequest	    serverRequest	    = new ServerRequest(dataPackage, false);
+        RuntimeDataHolder   runtimeDataHolder   = RuntimeDataHolder.getInstance();
+		Communication	    communication	    = runtimeDataHolder.getCommunication();
+        HashMap<String, RuntimeDataHolder> mementos = runtimeDataHolder.getMementos().getList();
 
-		communication.addRequest(serverRequest);
 
-		RuntimeDataHolder.getInstance().setLoggedUser(null);
+
+
+		mementos.remove(runtimeDataHolder.getLoggedUser().toString());
+        runtimeDataHolder.setLoggedUser(null);
+
+        if (mementos.size() == 0) {
+            communication.addRequest(serverRequest);
+            return false;
+        }
+
+        communication.addRequest(serverRequest);
+        communication.setRunning(false);
+
+
+
+        for (Map.Entry<String, RuntimeDataHolder> entry : mementos.entrySet()
+             ) {
+            System.out.println("Znaleziono innego użytkownika, zmiana");
+            runtimeDataHolder.restoreFromMemento(entry.getValue().getLoggedUser().toString());
+            return true;
+        }
+        System.out.println("Wylogowano");
+
+        return false;
 	}
 
 

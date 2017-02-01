@@ -2,13 +2,10 @@ package controllers;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -107,18 +104,34 @@ public class NavigationController extends Application {
     }
 
     public static void exitApp() {
-//        HashMap<String, RuntimeDataHolder> runtimeDataHolderHashMap
-//                = RuntimeDataHolder.getInstance().getMementos().getList();
-//
-//        for (Map.Entry<String, RuntimeDataHolder> entry : runtimeDataHolderHashMap.entrySet()
-//             ) {
-//            RuntimeDataHolder.getInstance().restoreFromMemento(entry.getValue().toString());
 
-            DataPackage dataPackage = new DataPackage("disconnect",null);
-            DataPackage   receivedDataPackage;
+        Communication c = RuntimeDataHolder.getInstance().getCommunication();
+        if (c.isRunning()) {
+            DataPackage     dataPackage         = new DataPackage("disconnect",null);
+            ServerRequest   request             = new ServerRequest(dataPackage, false);
+            DataPackage     receivedDataPackage;
 
-            ServerRequest request     = new ServerRequest(dataPackage, false);
-            Communication c = RuntimeDataHolder.getInstance().getCommunication();
+            c.addRequest(request);
+            c.setRunning(false);
+
+        }
+
+        HashMap<String, RuntimeDataHolder> runtimeDataHolderHashMap
+                = RuntimeDataHolder.getInstance().getMementos().getList();
+
+        for (Map.Entry<String, RuntimeDataHolder> entry : runtimeDataHolderHashMap.entrySet()
+             ) {
+            String          entryKey            = entry.getValue().getLoggedUser().toString();
+            DataPackage     dataPackage         = new DataPackage("disconnect",null);
+            ServerRequest   request             = new ServerRequest(dataPackage, false);
+            DataPackage     receivedDataPackage;
+
+            System.out.println("Entry key: "+entryKey);
+
+            RuntimeDataHolder.getInstance().restoreFromMemento(entryKey);
+
+
+            c = RuntimeDataHolder.getInstance().getCommunication();
 
             c.addRequest(request);
             c.setRunning(false);
@@ -126,7 +139,9 @@ public class NavigationController extends Application {
             receivedDataPackage = request.getDataPackage();
 
             System.out.println(receivedDataPackage.getDetails());
-//        }
+        }
+
+
 
         Platform.exit();
     }
