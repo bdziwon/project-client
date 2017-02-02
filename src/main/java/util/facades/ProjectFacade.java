@@ -5,6 +5,12 @@ import org.apache.maven.settings.Server;
 import util.DataPackage;
 import util.Project;
 import util.RuntimeDataHolder;
+import zipper.ZipSender;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -116,6 +122,40 @@ public class ProjectFacade {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void getFiles(Project selectedProject) {
+		DataPackage dataPackage = new DataPackage("get files",selectedProject);
+		ServerRequest request = new ServerRequest(dataPackage);
+
+		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+		try {
+			request.getSemaphore().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		ArrayList<Object> objects = (ArrayList<Object>) request.getDataPackage().getObject();
+		Project project = (Project) objects.get(0);
+		String folderName = Integer.toString(project.getId());
+		byte[] bytes = (byte[]) objects.get(1);
+		int count = (Integer) objects.get(2);
+
+		System.out.println(bytes);
+		File file = new File(folderName+".zip");
+		FileOutputStream fileOutputStream = null;
+		try {
+			fileOutputStream = new FileOutputStream(folderName+".zip");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			ZipSender.WriteBuff(fileOutputStream,bytes,count);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
 

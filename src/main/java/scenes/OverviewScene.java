@@ -80,6 +80,9 @@ public class OverviewScene implements Initializable {
     private Button sendFilesButton;
 
     @FXML
+    private Button getFilesButton;
+
+    @FXML
     private ListView<Issue> projectIssuesList;
 
 
@@ -96,6 +99,17 @@ public class OverviewScene implements Initializable {
             }
         });
     }
+
+    @FXML
+    private void getFilesButtonAction(ActionEvent event) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ProjectFacade.getInstance().getFiles(selectedProject);
+            }
+        });
+    }
+
 
     @FXML
     private void sendFilesButtonAction(ActionEvent event) {

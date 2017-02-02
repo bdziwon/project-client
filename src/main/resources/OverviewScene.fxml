@@ -79,7 +79,7 @@
                                  </GridPane.margin>
                               </Button>
                               <Button fx:id="removeProjectButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeProjectButtonAction" prefWidth="120.0" text="Usuń projekt" textAlignment="CENTER" GridPane.rowIndex="1" />
-                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="120.0" text="Pobierz pliki" textAlignment="CENTER" GridPane.rowIndex="2" />
+                              <Button fx:id="getFilesButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getFilesButtonAction" prefWidth="120.0" text="Pobierz pliki" textAlignment="CENTER" GridPane.rowIndex="2" />
                               <Button fx:id="sendFilesButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendFilesButtonAction" prefWidth="120.0" text="Wyślij pliki" textAlignment="CENTER" GridPane.rowIndex="3" />
                               <Button fx:id="refreshButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#refreshButtonAction" prefWidth="120.0" text="Odśwież" textAlignment="CENTER" GridPane.rowIndex="4" />
                            </children>
