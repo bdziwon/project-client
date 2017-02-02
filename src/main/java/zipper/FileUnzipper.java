@@ -35,8 +35,11 @@ public class FileUnzipper {
 
 	            	try (BufferedOutputStream bufferedOutputStream = 
 	            			new BufferedOutputStream(new FileOutputStream(file))) {
-
-	            		byte[] buffer = new byte[Math.toIntExact(entry.getSize())];
+	            		int test=Math.toIntExact(entry.getSize());
+	            		byte[] buffer = new byte[1];
+	            		if(test>-1){
+	            			buffer = new byte[test];
+	            		} 
 
 	            		int location;
 
@@ -53,7 +56,7 @@ public class FileUnzipper {
 	
 	public static void main(String[] args) throws IOException {
 		
-		File file= new File("C:/Documents and Settings/janusz.JAN/workspace/FileHandler/.settings.zip");
-		unzip(file,"C:/Documents and Settings/janusz.JAN/workspace/FileHandler/bin/");
+		File file= new File("C:/Documents and Settings/janusz.JAN/workspace/FileHandler/21.zip");
+		unzip(file,"C:/Documents and Settings/janusz.JAN/workspace/FileHandler/");
 	}
 }
