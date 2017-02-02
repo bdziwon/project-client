@@ -6,11 +6,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import util.Credentials;
+import util.Issue;
 import util.Project;
 import util.RuntimeDataHolder;
 import util.User;
@@ -53,7 +52,114 @@ public class OverviewScene implements Initializable {
     @FXML
     private Button removeProjectButton;
 
-    private Project selectedProject = new Project();
+    @FXML
+    private ListView<User> projectUsersList;
+
+    @FXML
+    private Button addUserButton;
+
+    @FXML
+    private Button removeUserButton;
+
+    @FXML
+    private Button addIssueButton;
+
+    @FXML
+    private Button removeIssueButton;
+
+    @FXML
+    private Button refreshButton;
+
+    @FXML
+    private Button showIssueButton;
+
+    @FXML
+    private Button sendFilesButton;
+
+    @FXML
+    private ListView<Issue> projectIssuesList;
+
+
+    private Project
+            selectedProject = new Project();
+
+
+    @FXML
+    private void refreshButtonAction(ActionEvent event) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NavigationController.navigateTo("OverviewScene.fxml", menuBar.getScene(), false);
+            }
+        });
+    }
+
+    @FXML
+    private void sendFilesButtonAction(ActionEvent event) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+            }
+        });
+    }
+
+    @FXML
+    private void showIssueButtonAction(ActionEvent event) {
+        Issue issue = projectIssuesList.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (issue == null) {
+            return;
+        }
+        alert.setTitle(issue.getTitle());
+        alert.setHeaderText(issue.getTitle());
+        alert.setContentText(issue.getDescription());
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void addIssueButtonAction(ActionEvent event) {
+        RuntimeDataHolder.getInstance().setSharedParam(selectedProject);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NavigationController.navigateTo("AddIssueScene.fxml", menuBar.getScene(), true);
+            }
+        });
+    }
+
+    @FXML
+    private void addUserButtonAction(ActionEvent event) {
+        RuntimeDataHolder.getInstance().setSharedParam(selectedProject);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NavigationController.navigateTo("AddUserScene.fxml", menuBar.getScene(), true);
+            }
+        });
+    }
+
+    @FXML
+    private void removeIssueButtonAction(ActionEvent event) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                selectedProject.getIssues().remove(projectIssuesList.getSelectionModel().getSelectedItem());
+                projectIssuesList.getItems().remove(projectIssuesList.getSelectionModel().getSelectedItem());
+
+            }
+        });
+    }
+
+    @FXML
+    private void removeUserButtonAction(ActionEvent event) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                selectedProject.getUsers().remove(projectUsersList.getSelectionModel().getSelectedItem());
+                projectUsersList.getItems().remove(projectUsersList.getSelectionModel().getSelectedItem());
+            }
+        });
+    }
 
     @FXML
     private void logoutMenuItemAction(ActionEvent event) {
@@ -107,6 +213,12 @@ public class OverviewScene implements Initializable {
         if (jobTitle.equals("ADMINISTRATOR")) {
             initAdministrator();
         }
+        if (jobTitle.equals("TESTER")) {
+            initTester();
+        }
+        if (jobTitle.equals("PROGRAMISTA")) {
+            initProgramista();
+        }
         initChangeUser();
         initProjectList();
     }
@@ -122,9 +234,21 @@ public class OverviewScene implements Initializable {
         projectList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Project>() {
             @Override
             public void changed(ObservableValue<? extends Project> observableValue, Project project, Project t1) {
+                projectUsersList.getItems().clear();
+                projectIssuesList.getItems().clear();
                 selectedProject = t1;
                 projectTitleTextArea.setText(t1.getTitle());
                 projectDescriptionTextArea.setText(t1.getDescription());
+                selectedProject = ProjectFacade.getInstance().getProject(selectedProject);
+                for (User user : selectedProject.getUsers()
+                     ) {
+                    projectUsersList.getItems().add(user);
+                }
+
+                for (Issue issue : selectedProject.getIssues()
+                     ) {
+                    projectIssuesList.getItems().add(issue);
+                }
             }
         });
 
@@ -179,11 +303,27 @@ public class OverviewScene implements Initializable {
         );
     }
 
+    private void initProgramista() {
+        removeIssueButton.setDisable(false);
+        sendFilesButton.setDisable(false);
+    }
+
+    private void initTester() {
+        addIssueButton.setDisable(false);
+        removeIssueButton.setDisable(false);
+    }
+
     private void initAdministrator() {
         Menu    menu;
+
         projectTitleTextArea.setEditable(true);
         projectDescriptionTextArea.setEditable(true);
+        addUserButton.setDisable(false);
+        sendFilesButton.setDisable(false);
+        removeUserButton.setDisable(false);
         removeProjectButton.setDisable(false);
+        addIssueButton.setDisable(false);
+        removeIssueButton.setDisable(false);
         leftMenuLabel.setText("Wszystkie projekty");
         menu = new Menu("Administracja");
         final MenuItem createProjectMenuItem = new MenuItem("Stwórz projekt");

@@ -103,6 +103,22 @@ public class NavigationController extends Application {
 
     }
 
+    public static void navigateUp(Scene scene, boolean centered) {
+        Stage   stage = (Stage) scene.getWindow();
+        try {
+            scene = scenes.pop();
+        } catch (NoSuchElementException e) {
+            return;
+        }
+        RuntimeDataHolder.getInstance().setScene(scene);
+        stage.setScene(scene);
+        if (centered) {
+            stage.centerOnScreen();
+        }
+
+
+    }
+
     public static void exitApp() {
 
         Communication c = RuntimeDataHolder.getInstance().getCommunication();

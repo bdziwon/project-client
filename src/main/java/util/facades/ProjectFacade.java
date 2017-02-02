@@ -84,6 +84,20 @@ public class ProjectFacade {
 			e.printStackTrace();
 		}
 	}
+
+	public Project getProject(Project selectedProject) {
+		DataPackage dataPackage = new DataPackage("select",selectedProject);
+		ServerRequest request = new ServerRequest(dataPackage);
+
+		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+		try {
+			request.getSemaphore().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return (Project) request.getDataPackage().getObject();
+	}
 }
 
 

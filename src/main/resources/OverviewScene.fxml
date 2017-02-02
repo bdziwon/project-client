@@ -19,7 +19,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2147483647">
+      <SplitPane dividerPositions="0.25318761384335153" prefHeight="160.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2147483647">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -38,13 +38,14 @@
                      </font></Label>
                   <GridPane layoutY="52.0" prefHeight="718.0" prefWidth="767.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="630.0" minWidth="10.0" prefWidth="597.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="170.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="630.0" minWidth="10.0" prefWidth="322.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="630.0" minWidth="10.0" prefWidth="321.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="172.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints maxHeight="200.0" minHeight="0.0" prefHeight="61.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="584.0" minHeight="10.0" prefHeight="321.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="603.0" minHeight="10.0" prefHeight="334.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="584.0" minHeight="10.0" prefHeight="278.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="603.0" minHeight="10.0" prefHeight="378.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <TextArea fx:id="projectTitleTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Tutaj znajdzie się tytuł" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
@@ -55,18 +56,21 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin>
                         </TextArea>
-                        <TextArea fx:id="projectDescriptionTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Tutaj zobaczysz opis projektu" GridPane.rowIndex="1">
+                        <TextArea fx:id="projectDescriptionTextArea" editable="false" prefHeight="330.0" prefWidth="579.0" promptText="Tutaj zobaczysz opis projektu" GridPane.columnSpan="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </GridPane.margin></TextArea>
-                        <GridPane alignment="CENTER" prefHeight="252.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                        <GridPane alignment="CENTER" prefHeight="127.0" prefWidth="152.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints maxHeight="78.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="284.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="251.0" minHeight="10.0" prefHeight="251.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="284.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="251.0" minHeight="9.0" prefHeight="29.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="251.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="251.0" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="251.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Button fx:id="saveChangesButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#saveChangesButtonAction" prefWidth="120.0" text="Zapisz zmiany" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -75,11 +79,63 @@
                                  </GridPane.margin>
                               </Button>
                               <Button fx:id="removeProjectButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeProjectButtonAction" prefWidth="120.0" text="Usuń projekt" textAlignment="CENTER" GridPane.rowIndex="1" />
+                              <Button alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="120.0" text="Pobierz pliki" textAlignment="CENTER" GridPane.rowIndex="2" />
+                              <Button fx:id="sendFilesButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendFilesButtonAction" prefWidth="120.0" text="Wyślij pliki" textAlignment="CENTER" GridPane.rowIndex="3" />
+                              <Button fx:id="refreshButton" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#refreshButtonAction" prefWidth="120.0" text="Odśwież" textAlignment="CENTER" GridPane.rowIndex="4" />
                            </children>
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </GridPane>
+                        <ScrollPane prefViewportHeight="334.0" prefViewportWidth="303.0" GridPane.rowIndex="2">
+                           <content>
+                              <GridPane prefHeight="376.0" prefWidth="317.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="156.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="301.0" minHeight="10.0" prefHeight="297.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="301.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Członkowie" textAlignment="CENTER" wrappingWidth="319.51220703125" />
+                                    <ListView fx:id="projectUsersList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                                    <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                       <children>
+                                          <Button fx:id="addUserButton" disable="true" mnemonicParsing="false" onAction="#addUserButtonAction" text="Dodaj" />
+                                          <Button fx:id="removeUserButton" disable="true" mnemonicParsing="false" onAction="#removeUserButtonAction" text="Usuń zaznaczony" />
+                                       </children>
+                                    </FlowPane>
+                                 </children>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane prefViewportHeight="334.0" prefViewportWidth="303.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <content>
+                              <GridPane prefHeight="376.0" prefWidth="317.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Zgłoszone błędy" textAlignment="CENTER" wrappingWidth="319.51220703125" />
+                                    <ListView fx:id="projectIssuesList" prefHeight="293.0" prefWidth="317.0" GridPane.rowIndex="1" />
+                                    <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                       <children>
+                                          <Button fx:id="addIssueButton" disable="true" mnemonicParsing="false" onAction="#addIssueButtonAction" text="Dodaj" />
+                                          <Button fx:id="removeIssueButton" disable="true" mnemonicParsing="false" onAction="#removeIssueButtonAction" text="Usuń zazn." />
+                                          <Button fx:id="showIssueButton" mnemonicParsing="false" onAction="#showIssueButtonAction" text="Pokaż zazn." />
+                                       </children>
+                                    </FlowPane>
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="156.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="301.0" minHeight="10.0" prefHeight="297.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="301.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
                      </children>
                   </GridPane>
                </children></AnchorPane>

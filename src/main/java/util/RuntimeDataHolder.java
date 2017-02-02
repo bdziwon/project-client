@@ -16,6 +16,7 @@ public class RuntimeDataHolder {
     private User                loggedUser      = null;
     private Scene               scene           = null;
     private Communication       communication   = null;
+    private Object              sharedParam     = null;
 
     private RuntimeDataHolder() {
     }
@@ -83,5 +84,13 @@ public class RuntimeDataHolder {
         UserFacade.getInstance().connectToServer();
         this.setScene(runtimeDataHolder.getScene());
         this.getCommunication().startThread();
+    }
+
+    public Object getSharedParam() {
+        return sharedParam;
+    }
+
+    public void setSharedParam(Object sharedParam) {
+        this.sharedParam = sharedParam;
     }
 }
