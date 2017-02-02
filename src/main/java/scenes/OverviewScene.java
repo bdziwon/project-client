@@ -15,7 +15,10 @@ import util.RuntimeDataHolder;
 import util.User;
 import util.facades.ProjectFacade;
 import util.facades.UserFacade;
+import zipper.FileZipper;
+import zipper.ZipSender;
 
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +102,29 @@ public class OverviewScene implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                String folderName = Integer.toString(selectedProject.getId());
+                try {
+                    FileZipper.zipFolder(folderName, folderName+".zip");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                File zip = new File(folderName+".zip");
+                FileInputStream fileInputStream = null;
+
+                try {
+                    fileInputStream = new FileInputStream(zip);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                byte[] bytes = null;
+                try {
+                    bytes = ZipSender.readBuff(fileInputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ProjectFacade.getInstance().sendFiles(selectedProject, bytes, ZipSender.ind);
+
             }
         });
     }

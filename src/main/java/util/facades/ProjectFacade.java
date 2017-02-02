@@ -98,6 +98,25 @@ public class ProjectFacade {
 		}
 		return (Project) request.getDataPackage().getObject();
 	}
+
+    public void sendFiles(Project selectedProject, byte[] bytes, int count) {
+		ArrayList<Object> objects = new ArrayList<Object>();
+
+		objects.add(selectedProject);
+		objects.add(bytes);
+		objects.add(count);
+
+		DataPackage dataPackage = new DataPackage("save files",objects);
+		ServerRequest request = new ServerRequest(dataPackage);
+
+		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
+
+		try {
+			request.getSemaphore().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }
 
 
