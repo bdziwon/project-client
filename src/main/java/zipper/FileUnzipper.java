@@ -1,17 +1,63 @@
 package zipper;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class FileUnzipper {
 
-	
+
+	public static void unzip2(File source, String out) {
+		ZipInputStream 			zipInputStream 	= null;
+		ZipEntry 				zipEntry		= null;
+		File					file			= null;
+		BufferedOutputStream 	outputStream	= null;
+
+		try {
+			zipInputStream = new ZipInputStream(new FileInputStream(source));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		while (true) {
+			try {
+				zipEntry = zipInputStream.getNextEntry();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (zipEntry == null) {
+				break;
+			}
+
+			file = new File(zipEntry.getName());
+
+			if (zipEntry.isDirectory()) {
+				file.mkdir();
+				continue;
+			}
+
+			try {
+				outputStream = new BufferedOutputStream(new FileOutputStream(file));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			int location;
+			byte[] buffer = new byte[1];
+
+			try {
+				while ((location = zipInputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, location);
+                }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+
+		}
+
+	}
+
 	public static void unzip(File source, String out) throws IOException {
 	    
 		try (ZipInputStream zipInputStream = 

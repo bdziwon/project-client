@@ -2,6 +2,9 @@ package util.facades;
 
 import net.ServerRequest;
 import org.apache.maven.settings.Server;
+import org.zeroturnaround.zip.ZipUtil;
+import org.zeroturnaround.zip.Zips;
+import org.zeroturnaround.zip.commons.FileUtils;
 import util.DataPackage;
 import util.Project;
 import util.RuntimeDataHolder;
@@ -125,8 +128,9 @@ public class ProjectFacade {
 	}
 
 	public void getFiles(Project selectedProject) {
-		DataPackage dataPackage = new DataPackage("get files",selectedProject);
-		ServerRequest request = new ServerRequest(dataPackage);
+		DataPackage 		dataPackage 	= new DataPackage("get files",selectedProject);
+		ServerRequest 		request 		= new ServerRequest(dataPackage);
+		ArrayList<Object> 	objects			= null;
 
 		RuntimeDataHolder.getInstance().getCommunication().addRequest(request);
 
@@ -136,13 +140,12 @@ public class ProjectFacade {
 			e.printStackTrace();
 		}
 
-		ArrayList<Object> objects = (ArrayList<Object>) request.getDataPackage().getObject();
-		Project project = (Project) objects.get(0);
-		String folderName = Integer.toString(project.getId());
-		byte[] bytes = (byte[]) objects.get(1);
-		int count = (Integer) objects.get(2);
+		objects = (ArrayList<Object>) request.getDataPackage().getObject();
+		Project project 	= (Project) objects.get(0);
+		String 	folderName 	= Integer.toString(project.getId());
+		byte[] 	bytes 		= (byte[]) objects.get(1);
+		int 	count 		= (Integer) objects.get(2);
 
-		System.out.println(bytes);
 		File file = new File(folderName+".zip");
 		FileOutputStream fileOutputStream = null;
 		try {
@@ -155,6 +158,15 @@ public class ProjectFacade {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		File folder = new File(folderName);
+		try {
+			FileUtils.deleteDirectory(folder);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		folder.mkdir();
+		ZipUtil.unpack(file, folder);
 
 	}
 }

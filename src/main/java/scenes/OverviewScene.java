@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import org.zeroturnaround.zip.ZipUtil;
 import util.Issue;
 import util.Project;
 import util.RuntimeDataHolder;
@@ -116,13 +117,19 @@ public class OverviewScene implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                String folderName = Integer.toString(selectedProject.getId());
-                try {
-                    FileZipper.zipFolder(folderName, folderName+".zip");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                String  folderName  = Integer.toString(selectedProject.getId());
+                File    zip         = new File(folderName+".zip");
+                File    folder      = new File(folderName);
+
+                folder.mkdir();
+                try  {
+                    ZipUtil.pack(folder,zip);
+                } catch (Exception e) {
+                    if (!e.toString().contains("any files!")) {
+                        e.printStackTrace();
+                    }
                 }
-                File zip = new File(folderName+".zip");
+
                 FileInputStream fileInputStream = null;
 
                 try {
